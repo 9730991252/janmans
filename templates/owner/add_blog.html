@@ -1,0 +1,171 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% load static %}
+{% include 'include/navbar.html' %}
+
+<style>
+    .main{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 400px);
+        justify-content: start;
+        gap: 20px;
+    }
+    .post{
+        width: 350px;
+        margin: 0 auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    .headding{
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+    }
+    .post_img{
+        overflow: hidden;
+        width: 200px;
+        height: fit-content;
+        img{
+            width: 100%;
+        }
+    }
+    .date{
+        width: 100%;
+        text-align: end;
+        font-weight: 600;
+    }
+    .footer{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    .dess{
+        width: 100%;
+        overflow: scroll;
+    }
+</style>
+
+<div class="container">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Add_Post">Add Post</button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="Add_Post" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Post</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="mb-3">
+                            <select name="category" class="form-select" aria-label="Default select example" required>
+                                <option value="">category</option>
+                                {% for c in category %}
+                                    <option value="{{c.id}}">{{c.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="heading" class="form-label">Heading</label>
+                            <input type="text" class="form-control" id="heading" name="heading" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Image" class="form-label">Image</label>
+                            <input type="file" class="form-control" id="Image" name="image" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description"></textarea>
+                        </div>
+                        <button type="submit" name="add_post" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+        {% if post %}
+        <div class="text-center">
+            <b><h3>Post</h3></b>
+        </div>
+        <div class="main">
+            {% for p in post %}
+                    <div class="post">
+                        <div class="headding">{{p.heading}}</div>
+                        <div class="post_img">{% if p.image %}<img src="{{p.image.url}}" alt=" ">{% endif %}</div>
+                        <div class="dess text-wrap">{{p.description | safe | slice:':100'}}</div>
+                        <div class="date">{{p.date}}</div>
+                        <div class="footer">
+                            <div class="status"><form class="" method="POST">{% csrf_token %}{% if p.status == 1 %}<button class="btn btn-success" type="submit" name="active">Active<input type="hidden" name="id" value="{{p.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="deactive">Deactive<input type="hidden" name="id" value="{{p.id}}"></button>{% endif %}</form></div>
+                            <div class="edit"><button onclick="edit_post('{{p.id}}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Edit_Post{{p.id}}">Edit</button></div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="Edit_Post{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit POST</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                    <input type="hidden" name="id" value="{{p.id}}">
+                                    <div class="mb-3">
+                                        <select name="category" class="form-select" aria-label="Default select example" required>
+                                            <option value="{{p.category_id}}">{{p.category.name}}</option>
+                                            {% for c in category %}
+                                                <option value="{{c.id}}">{{c.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="heading" class="form-label">Heading</label>
+                                        <input type="text" class="form-control" value="{{p.heading}}" id="heading" name="heading" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Image" class="form-label">Image</label>
+                                        <input type="file" value="" class="form-control" id="Image" name="image">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea name="description" id="edit_description{{p.id}}">{{p.description | safe}}</textarea>
+                                    </div>
+                                    <button type="submit" name="edit_post" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+</div>
+{% endif %}
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<script>
+        $(document).ready(function() {
+        $('#description').summernote();
+    });
+
+    function edit_post(id){
+        $('#edit_description'+id).summernote();
+    }
+</script>
+{% endblock content %}
