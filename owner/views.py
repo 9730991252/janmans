@@ -14,13 +14,11 @@ def add_category(request):
     if request.session.has_key('owner_mobile'):
         if 'add_category'in request.POST:
             name = request.POST.get('name').upper()
-            image = request.FILES.get('image')
             if Category.objects.filter(name=name).exists():
                 pass
             else:
                 Category(
                     name = name,
-                    image = image,
                     status = 1
                 ).save()
             return redirect('/owner/add_category/')
@@ -39,14 +37,9 @@ def add_category(request):
         if 'edit_category'in request.POST:
             id = request.POST.get('id')
             name = request.POST.get('name').upper()
-            image = request.FILES.get('image')
-            if image == None:
-                c = Category.objects.filter(id=id).first()
-                image = c.image
             Category(
                 id=id,
                 name = name,
-                image = image,
                 status = 1
             ).save()
             return redirect('/owner/add_category/')

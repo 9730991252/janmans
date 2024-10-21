@@ -143,7 +143,7 @@ server{
     listen 80;
     listen [::]:80;
 
-    server_name janmans.digitalkarmala.com www.janmans.digitalkarmala.com;
+    server_name janmanasnews.com www.janmanasnews.com;
     client_max_body_size 500M;
 
     location = /favicon.ico { access_log off; log_not_found off; }
@@ -184,4 +184,4 @@ sudo systemctl restart janmans.com.gunicorn
 
 sudo certbot --nginx
 
-sudo certbot --nginx -d janmans.narayaniorder.com -d www.janmans.narayaniorder.com
+sudo certbot --nginx -d janmanasnews.com -d www.janmanasnews.com

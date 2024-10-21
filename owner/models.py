@@ -4,14 +4,7 @@ from ckeditor.fields import RichTextField
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="category_images",default="",null=True, blank=True)
     status = models.IntegerField()
-    def save(self, *args,**kwargs):
-        super().save(*args,**kwargs)
-        image = Image.open(self.image.path)
-        output_size = (300,300)
-        image.thumbnail(output_size)
-        image.save(self.image.path)
         
 class Post(models.Model):
     category=models.ForeignKey(Category,on_delete=models.CASCADE, null=True)
