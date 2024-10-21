@@ -6,6 +6,7 @@
 {% block content %}
 {% load static %}
 {% include 'include/navbar.html' %}
+{% load home_tag %}
 <div id="result">
 <style>
 .main_box{
@@ -69,8 +70,8 @@
        <div class="description"> {{post.description | safe}}</div>
     </div>
     <div class="footer">
-        <div class="like_box"><i class="fa-regular fa-thumbs-up"></i>&nbsp;100</div>
-        <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;100</div>
+        <div class="like_box" id="like_box{{post.id}}" onclick="user_like_post('{{post.id}}','{{ip}}')">{% user_like post.id ip %}</div>
+        <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;{{views}}</div>
         <div class="date">{{post.date}}</div>
         <div class="whatsapp">
             <a href="https://api.whatsapp.com/send?phone=&text={{post.heading}} 👉 https://www.janmans.digitalkarmala.com{{request.path}}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
@@ -151,18 +152,18 @@
 <div class="main">
 
     {% for p in all_post %}
-        <a href="/post_detail/{{p.id}}/" {% if p.id == post.id %} style="visibility: hidden;"{% endif %} >
-            <div class="post">
+    <div class="post" {% if p.id == post.id %} style="visibility: hidden;"{% endif %}>
+            <a href="/post_detail/{{p.id}}/"  >
                 <div class="post_img">{% if p.image %}<img src="{{p.image.url}}" alt=" ">{% endif %}</div>
                 <div class="headding">{{p.heading |slice:':50'}}...</div>
 
+            </a>
                 <div id="post_footer">
-                    <div class="like_box"><i class="fa-regular fa-thumbs-up"></i>&nbsp;100</div>
+                    <div class="like_box" id="like_box{{p.id}}" onclick="user_like_post('{{p.id}}','{{ip}}')">{% user_like p.id ip %}</div>
                     <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;100</div>
                     <div class="date">{{p.date}}</div>
                 </div>
             </div>
-        </a>
     {% endfor %}
 
 </div>
@@ -225,5 +226,21 @@
 </div>
 <br><br>
 
+<script>
+    function user_like_post(id, ip){
+        $.ajax({
+                url: "{% url 'user_like_post' %}",
+                method: "GET",
+                data:{
+                    id:id,
+                    ip:ip
+                      },
+                    success: function(res){
+                        $("#like_box"+id).html(res.t)
+                        // like_box
+                    }
+            })
+    }
+</script>
 </div>
 {% endblock content %}

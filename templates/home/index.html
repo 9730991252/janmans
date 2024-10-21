@@ -1,9 +1,14 @@
 {% extends 'home/base.html' %}
+{% load static %}
 {% block head %}
+
+<meta property="og:image" content="https://janmans/digitalkarmala.com{% static 'img/logo.jpeg' %}">
+
 {% endblock head %}
 {% block content %}
-{% load static %}
 {% include 'include/navbar.html' %}
+{% load home_tag %}
+
 <div id="result">
 <style>
     .category_main{
@@ -119,22 +124,37 @@
 <div class="main">
 
     {% for p in post %}
-        <a href="/post_detail/{{p.id}}/">
-            <div class="post">
+    <div class="post">
+            <a href="/post_detail/{{p.id}}/">
                 <div class="post_img">{% if p.image %}<img src="{{p.image.url}}" alt=" ">{% endif %}</div>
                 <div class="headding">{{p.heading |slice:':50'}}...</div>
-                <div id="post_footer">
-                    <div class="like_box"><i class="fa-regular fa-thumbs-up"></i>&nbsp;100</div>
-                    <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;100</div>
-                    <div class="date">{{p.date}}</div>
-                </div>
+            </a>
+            <div id="post_footer">
+                <div class="date" id="like_box{{p.id}}" onclick="user_like_post('{{p.id}}','{{ip}}')">{% user_like p.id ip %}</div>
+                <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;{% post_views p.id %}+</div>
+                <div class="date">{{p.date}}</div> 
             </div>
-        </a>
+    </div>
     {% endfor %}
 
 </div>
 
-
+<script>
+    function user_like_post(id, ip){
+        $.ajax({
+                url: "{% url 'user_like_post' %}",
+                method: "GET",
+                data:{
+                    id:id,
+                    ip:ip
+                      },
+                    success: function(res){
+                        $("#like_box"+id).html(res.t)
+                        // like_box
+                    }
+            })
+    }
+</script>
 
 </div>
 {% endblock content %}

@@ -27,3 +27,15 @@ class Post(models.Model):
         output_size = (300,300)
         image.thumbnail(output_size)
         image.save(self.image.path)
+        
+class Post_views(models.Model):
+    post=models.ForeignKey(Post,on_delete=models.CASCADE, null=True)
+    count = models.IntegerField(default=None)
+
+class User(models.Model):
+    user = models.CharField(max_length=200,default=None)
+
+class Post_like(models.Model):
+    post=models.ForeignKey(Post,on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    status = models.IntegerField(default=1)
