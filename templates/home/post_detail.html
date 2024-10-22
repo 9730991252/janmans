@@ -11,15 +11,14 @@
 <style>
 .main_box{
     border: 1px solid black;
-    width: 95vw;
+    width: 95%;
     margin: 0 auto;
-    padding: 10px;
     text-align: start;
 }
 
 .description{
     overflow: hidden;
-    width: 95vw;
+    width: 95%;
     padding-left: 0px;
     padding: 10px;
 }
@@ -39,10 +38,10 @@
 
 @media only screen and (max-width: 500px){
         .main_post{
-            width: 95vw;
+            width: 95%;
         }
     .description{
-    width: 95vw;
+    width: 95%;
     }
     .new_post{
         display: none;
@@ -62,6 +61,13 @@
 .user{
     margin-left: 20px;
     margin-top: 10px;
+}
+.image{
+    width: 100%;
+    img{
+        height: 150px;
+        margin: 0 auto;
+    }
 }
 </style>
 
@@ -96,12 +102,12 @@
 <style>
     .main{
         display: grid;
-        grid-template-columns: repeat(auto-fit, 400px);
+        grid-template-columns: repeat(auto-fit, 300px);
         justify-content: start;
         gap: 20px;
     }
     .post{
-        width: 350px;
+        width: 300px;
         height: 350px;
         margin: 0 auto;
         display: flex;
