@@ -7,9 +7,8 @@ def index(request):
     ip = user_ip(request)
     context={
         'ip':ip,
-        'post':Post.objects.filter(status=1),
+        'post':Post.objects.filter(status=1).order_by('-id'),
         'category':Category.objects.filter(status=1),
-        'last_post':Post.objects.filter(status=1).last()
     }
     return render(request, 'home/index.html',context)
 
