@@ -1,7 +1,8 @@
 {% extends 'home/base.html' %}
 {% block head %}
 <meta property="og:image" content="https://janmanasnews.com{{post.image.url}}">
-<meta property="og:description" content="{{post.heading}}" />  <!-- your  Description -->
+<meta property="og:title" content="{{post.heading}}s" /> 
+<meta property="og:description" content="{{post.description | safe | slice:':50'}}" />  <!-- your  Description -->
 {% endblock head %}
 {% block content %}
 {% load static %}
@@ -85,7 +86,7 @@
         <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;{{views}}</div>
         <div class="date">{{post.date}}</div>
         <div class="whatsapp">
-            <a href="https://api.whatsapp.com/send?phone=&text={{post.heading}} 👉🏻 https://janmanasnews.com{{request.path}}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://api.whatsapp.com/send?phone=&text={{post.heading}} %0a https://janmanasnews.com{{request.path}}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
          </div>
     </div>
 </div>
@@ -172,7 +173,7 @@
             </a>
                 <div id="post_footer">
                     <div class="like_box" id="like_box{{p.id}}" onclick="user_like_post('{{p.id}}','{{ip}}')">{% user_like p.id ip %}</div>
-                    <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;100</div>
+                    <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;{% post_views p.id %}+</div>
                     <div class="date">{{p.date}}</div>
                 </div>
             </div>
