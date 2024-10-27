@@ -70,6 +70,18 @@
         margin: 0 auto;
     }
 }
+.advertise{
+    text-align: center;
+    background-color: rgb(255, 223, 250);
+    width: fit-content;
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: 10px;
+    .a{
+        color: blue;
+        font-weight: 600;
+    }
+}
 </style>
 
 
@@ -81,6 +93,7 @@
         <div class="user"><i class="fa-solid fa-user"></i> - संजय साखरे</div>
        <div class="description"> {{post.description | safe}}</div>
     </div>
+    <a href="https://digitalkarmala.com/contact_us/"><div class="advertise">सर्व प्रकारच्या व्यवसायासाठी बिलिंग व बारकोड सॉफ्टवेअर तयार करून मिळेल. सुनील काळे - <a href="https://digitalkarmala.com/contact_us/" class="a">9730 99 1252</a> </div></a>
     <div class="footer">
         <div class="like_box" id="like_box{{post.id}}" onclick="user_like_post('{{post.id}}','{{ip}}')">{% user_like post.id ip %}</div>
         <div class="date"><i class="fa-regular fa-eye"></i>&nbsp;{{views}}</div>
