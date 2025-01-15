@@ -124,7 +124,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
-.post_images
+post_images/
 .category_images
 env/
 venv/
