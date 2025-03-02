@@ -14,12 +14,6 @@ class Post(models.Model):
     date = models.DateField(auto_now_add=True, null=True)
     added_date = models.DateTimeField(auto_now_add=True, null=True)
     status = models.IntegerField()
-    def save(self, *args,**kwargs):
-        super().save(*args,**kwargs)
-        image = Image.open(self.image.path)
-        output_size = (300,300)
-        image.thumbnail(output_size)
-        image.save(self.image.path)
         
 class Post_views(models.Model):
     post=models.ForeignKey(Post,on_delete=models.CASCADE, null=True)

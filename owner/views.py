@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import *
+import io
 # Create your views here.
 def owner_home(request):
     if request.session.has_key('owner_mobile'):
@@ -52,24 +53,32 @@ def add_category(request):
     else:
         return redirect('/login/')
     
+def compress_image(image):
+    im = Image.open(image)
+    im_io = io.BytesIO()
+    im.save(im_io, 'WEBP', quality=50)
+    return im_io
+    
 def add_blog(request):
     if request.session.has_key('owner_mobile'):
         if 'add_post'in request.POST:
             heading = request.POST.get('heading').upper()
             image = request.FILES.get('image')
+            compressed_image = compress_image(image)
             category_id = request.POST.get('category')
             description = request.POST.get('description')
-            print(description)
+
             if Post.objects.filter(heading=heading).exists():
                 pass
             else:
                 Post(
                     heading = heading,
-                    image = image,
                     category_id = category_id,
                     description = description,
                     status = 1
                 ).save()
+                p = Post.objects.filter(heading=heading).last()
+                p.image.save(image.name[:-5]+'.webp', compressed_image, save=True)
             return redirect('/owner/add_blog/')
         if 'active'in request.POST:
             id = request.POST.get('id')
@@ -100,7 +109,7 @@ def add_blog(request):
             return redirect('/owner/add_blog/')
         context={
             'login':1,
-            'post':Post.objects.all().order_by('-id'),
+            'post':Post.objects.all().order_by('-id')[0:5],
             'category':Category.objects.filter(status=1).order_by('-id'),
         }
         return render(request, 'owner/add_blog.html',context)
