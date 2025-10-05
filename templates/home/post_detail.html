@@ -1,6 +1,6 @@
 {% extends 'home/base.html' %}
 {% block head %}
-<meta property="og:image" content="https://janmanasnews.com{{post.image.url}}">
+<meta property="og:image" content="{{post.image.url}}">
 <meta property="og:title" content="{{post.heading}}s" /> 
 <meta property="og:description" content="{{post.description | safe | slice:':50'}}" />  <!-- your  Description -->
 {% endblock head %}
